@@ -59,13 +59,10 @@ searchTerm := req.GetStringTrimmed(r, "q")
 
 ```go
 // Get array of values
-colors := req.GetArray(r, "colors", nil)
+roles := req.GetArray(r, "roles", nil)
 
-// Check if array contains a value (simple contains check)
-hasAdmin := false
-for _, v := range colors {
-    if v == "admin" { hasAdmin = true; break }
-}
+// Check if array contains a value (Go 1.21+)
+hasAdmin := slices.Contains(roles, "admin")
 if hasAdmin {
     // User has admin permission
 }
