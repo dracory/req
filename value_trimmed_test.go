@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTrimmedValue(t *testing.T) {
+func TestValueTrimmed(t *testing.T) {
 	tests := []struct {
 		name     string
 		method   string
@@ -130,11 +130,11 @@ func TestTrimmedValue(t *testing.T) {
 			}
 
 			// Call the function under test
-			got := TrimmedValue(req, tt.key)
+			got := ValueTrimmed(req, tt.key)
 
 			// Assert the result
 			if got != tt.want {
-				t.Errorf("TrimmedValue() = %q, want %q", got, tt.want)
+				t.Errorf("ValueTrimmed() = %q, want %q", got, tt.want)
 			}
 		})
 	}
