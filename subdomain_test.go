@@ -45,10 +45,7 @@ func TestSubdomain(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			subdomain, err := Subdomain(req)
-			if err != nil {
-				t.Errorf("Subdomain() returned error %v", err)
-			}
+			subdomain := Subdomain(req)
 
 			if subdomain != tt.expected {
 				t.Errorf("Subdomain() = %q, want %q", subdomain, tt.expected)
@@ -58,10 +55,7 @@ func TestSubdomain(t *testing.T) {
 }
 
 func TestSubdomain_NilRequest(t *testing.T) {
-	subdomain, err := Subdomain(nil)
-	if err != nil {
-		t.Errorf("Subdomain() returned error %v", err)
-	}
+	subdomain := Subdomain(nil)
 
 	if subdomain != "" {
 		t.Errorf("Subdomain() = %q, want \"\"", subdomain)

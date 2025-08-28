@@ -18,15 +18,14 @@ import (
 //
 // Returns:
 //   - string: the subdomain, or an empty string if none found.
-//   - error: an error if any, otherwise nil.
-func Subdomain(r *http.Request) (string, error) {
+func Subdomain(r *http.Request) string {
 	if r == nil || r.URL == nil || r.URL.Host == "" {
-		return "", nil
+		return ""
 	}
 
 	// If the host is "localhost", there is no subdomain
 	if r.URL.Host == "localhost" {
-		return "", nil
+		return ""
 	}
 
 	// Find the index of the first dot in the host
@@ -34,11 +33,11 @@ func Subdomain(r *http.Request) (string, error) {
 
 	// If there is no dot, there is no subdomain
 	if i == -1 {
-		return "", nil
+		return ""
 	}
 
 	// The subdomain is the part of the host before the first dot
 	subdomain := r.URL.Host[:i]
 
-	return subdomain, nil
+	return subdomain
 }

@@ -8,7 +8,9 @@ import (
 )
 
 // Maps parses an array of maps from request parameters with the given key prefix.
-// The expected format is key[mapKey1][mapKey2] = value.
+// Supported formats:
+//   - key[mapKey][] = value (auto-numbered rows)
+//   - key[outer][inner] = value (two-level keys; uses the inner key as the map key)
 //
 // Parameters:
 //   - r: The HTTP request
@@ -67,7 +69,9 @@ func Maps(r *http.Request, key string, defaultValue []map[string]string) []map[s
 }
 
 // filterKeyEntries extracts map entries from url.Values that match the given key pattern.
-// The expected format is key[mapKey1][mapKey2] = value.
+// Supported patterns:
+//   - key[mapKey][] = values -> mapKey is used as the map key
+//   - key[outer][inner] = values -> inner is used as the map key
 // Returns a map where the key is the map key and the value is the array of values for that key.
 // Returns an error if no valid entries are found.
 func filterKeyEntries(all url.Values, key string) (map[string][]string, error) {
@@ -89,14 +93,24 @@ func filterKeyEntries(all url.Values, key string) (map[string][]string, error) {
 
 		// Split into map keys
 		mapKeys := strings.Split(suffix, "][")
-		if len(mapKeys) != 2 || mapKeys[0] == "" || mapKeys[1] == "" {
+		if len(mapKeys) == 2 {
+			// Handle key[mapKey][] (auto-numbered): second part may be empty
+			if mapKeys[0] == "" {
+				continue
+			}
+			var mapKey string
+			if mapKeys[1] == "" { // matches key[mapKey][]
+				mapKey = mapKeys[0]
+			} else { // matches key[outer][inner]
+				mapKey = mapKeys[1]
+			}
+			result[mapKey] = values
+			hasEntries = true
 			continue
 		}
 
-		// Use the second key as the map key
-		mapKey := mapKeys[1]
-		result[mapKey] = values
-		hasEntries = true
+		// No supported pattern matched
+		continue
 	}
 
 	if !hasEntries {

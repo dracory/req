@@ -51,3 +51,15 @@ func GetAllPost(r *http.Request) url.Values {
 	}
 	return r.PostForm
 }
+
+// AllGet returns all GET request variables as a url.Values object.
+// Deprecated: prefer GetAllGet for naming consistency. Kept to match documentation.
+func AllGet(r *http.Request) url.Values {
+	return GetAllGet(r)
+}
+
+// AllPost returns all POST request variables as a url.Values object.
+// Deprecated: prefer GetAllPost for naming consistency. Kept to match documentation.
+func AllPost(r *http.Request) url.Values {
+	return GetAllPost(r)
+}

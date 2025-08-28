@@ -8,89 +8,77 @@ import (
 	"github.com/spf13/cast"
 )
 
-// Array returns an array from the request
+// Array retrieves values from the request that match the given key in various formats:
+// 1. Direct match (key=value1&key=value2)
+// 2. Array notation (key[]=value1&key[]=value2)
+// 3. Numbered notation (key[0]=value1&key[1]=value2)
 //
 // Parameters:
-//   - r *http.Request: HTTP request
-//   - key string: key to get array for
-//   - defaultValue []string: default value to return if key does not exist
+//   - r *http.Request: HTTP request containing the form data
+//   - key string: the key to look up in the form data
+//   - defaultValue []string: value to return if key is not found
 //
 // Returns:
-//   - []string: array for key, or default value if not exists
+//   - []string: array of values for the key, or defaultValue if not found
 func Array(r *http.Request, key string, defaultValue []string) []string {
 	all := GetAll(r)
-
 	if all == nil {
 		return defaultValue
 	}
 
-	isReqNumbered := false
-	reqValues := []string{}
-	reqKeys := []string{}
+	// Check for direct match (key=value1&key=value2)
+	if values, exists := all[key]; exists {
+		return values
+	}
 
+	// Check for array notation (key[]=value1&key[]=value2)
+	arrayKey := key + "[]"
+	if values, exists := all[arrayKey]; exists {
+		return values
+	}
+
+	// Check for numbered notation (key[0]=value1&key[1]=value2)
+	return extractNumberedValues(all, key)
+}
+
+// extractNumberedValues handles the numbered array notation (key[0], key[1], etc.)
+func extractNumberedValues(all map[string][]string, key string) []string {
+	type indexedValue struct {
+		index int
+		value string
+	}
+
+	var values []indexedValue
+
+	// Find all keys that match the pattern key[number]
 	for k, v := range all {
-		isNotNumbered := k == key // key matches key, key sending full array
-
-		if isNotNumbered {
-			reqValues = append(reqValues, v...)
-			break
+		if !strings.HasPrefix(k, key+"[") || !strings.HasSuffix(k, "]") {
+			continue
 		}
 
-		isFullKey := k == key+`[]` // key matches key[]
+		// Extract the index from key[index]
+		indexStr := strings.TrimSuffix(strings.TrimPrefix(k, key+"["), "]")
+		index := cast.ToInt(indexStr)
 
-		if isFullKey {
-			reqValues = append(reqValues, v...)
-			break
+		// Get the first value (if any)
+		value := ""
+		if len(v) > 0 {
+			value = v[0]
 		}
 
-		isNumbered := strings.HasPrefix(k, key+"[") && strings.HasSuffix(k, "]") // key matches key[number]
-
-		if isNumbered {
-			isReqNumbered = true
-			reqKeys = append(reqKeys, k)
-			if len(v) < 1 {
-				reqValues = append(reqValues, "")
-			} else {
-				reqValues = append(reqValues, v[0])
-			}
-		}
-
+		values = append(values, indexedValue{index: index, value: value})
 	}
 
-	if isReqNumbered {
-		originalKeyIndex := map[string]int{}
-		keyNumber := map[string]int{}
+	// Sort values by their index
+	sort.Slice(values, func(i, j int) bool {
+		return values[i].index < values[j].index
+	})
 
-		// sort reqKeys and keep order of reqValues
-		for i, k := range reqKeys {
-			originalKeyIndex[k] = i
-			keyIndex := strings.TrimSuffix(strings.TrimPrefix(k, key+"["), "]")
-			keyNumber[k] = cast.ToInt(keyIndex)
-		}
-
-		sortedNumbers := []int{}
-
-		for _, v := range keyNumber {
-			sortedNumbers = append(sortedNumbers, v)
-		}
-
-		sort.Ints(sortedNumbers)
-
-		sortedReqValues := []string{}
-		for _, sortedNumber := range sortedNumbers {
-			foundKey := ""
-			for key, number := range keyNumber {
-				if number == sortedNumber {
-					foundKey = key
-				}
-			}
-			if foundKey == "" {
-				continue
-			}
-			sortedReqValues = append(sortedReqValues, reqValues[originalKeyIndex[foundKey]])
-		}
-		reqValues = sortedReqValues
+	// Extract just the values in order
+	result := make([]string, len(values))
+	for i, v := range values {
+		result[i] = v.value
 	}
 
-	return reqValues
+	return result
 }

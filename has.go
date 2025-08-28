@@ -33,7 +33,8 @@ func HasPost(r *http.Request, key string) bool {
 		return false
 	}
 
-	_, exists := r.Form[key]
+	// Use PostForm to ensure we only consider POST parameters, not combined GET+POST
+	_, exists := r.PostForm[key]
 	return exists
 }
 
