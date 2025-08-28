@@ -4,21 +4,21 @@ package req
 //
 // The package is imported like this:
 //
-//	import "github.com/gouniverse/req"
+//	import "github.com/dracory/req"
 //
 // # Example
 //
 // To get the value of a GET parameter:
 //
-//	value := req.Value(r, "key")
+//	value := req.GetString(r, "key")
 //
 // To get the value of a POST parameter:
 //
-//	value := req.Value(r, "key")
+//	value := req.GetString(r, "key")
 //
 // To get the value of a GET or POST parameter:
 //
-//	value := req.Value(r, "key")
+//	value := req.GetString(r, "key")
 //
 // To check if a GET parameter exists:
 //
@@ -40,24 +40,24 @@ package req
 //
 // To get all GET parameters:
 //
-//	all := req.AllGet(r)
+//	all := req.GetAllGet(r)
 //
 // To get all POST parameters:
 //
-//	all := req.AllPost(r)
+//	all := req.GetAllPost(r)
 //
 // To get all GET and POST parameters:
 //
-//	all := req.All(r)
+//	all := req.GetAll(r)
 //
 // To get a map of GET parameters:
 //
-//	map := req.Map(r, "key")
+//	m := req.GetMap(r, "key")
 //
 // To get a map of POST parameters:
 //
-//	map := req.Map(r, "key")
+//	m := req.GetMap(r, "key")
 //
 // To get a map of GET or POST parameters:
 //
-//	map := req.Map(r, "key")
+//	m := req.GetMap(r, "key")
