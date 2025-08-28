@@ -86,6 +86,39 @@ if req.IsPrivateIP(ip) {
 subdomain := req.Subdomain("api.example.com") // returns "api"
 ```
 
+## Available Functions
+
+### Request Parameter Handling
+- `Value(r *http.Request, key string) string` - Returns the value of a GET or POST parameter
+- `ValueOr(r *http.Request, key string, defaultValue string) string` - Returns a value with a fallback if not found
+- `TrimmedValue(r *http.Request, key string) string` - Returns a trimmed (whitespace removed) value
+- `TrimmedValueOr(r *http.Request, key string, defaultValue string) string` - Returns a trimmed value with a fallback
+
+### Parameter Existence Checking
+- `Has(r *http.Request, key string) bool` - Checks if a parameter exists in GET or POST
+- `HasGet(r *http.Request, key string) bool` - Checks if a GET parameter exists
+- `HasPost(r *http.Request, key string) bool` - Checks if a POST parameter exists
+
+### Array Operations
+- `Array(r *http.Request, key string, defaultValue []string) []string` - Gets an array of values from request parameters
+- `ArrayHas(r *http.Request, key string, value string) bool` - Checks if an array contains a specific value
+
+### Map Operations
+- `Map(r *http.Request, key string) map[string]string` - Gets a map from request parameters
+- `Maps(r *http.Request, key string, defaultValue []map[string]string) []map[string]string` - Gets an array of maps from request parameters
+
+### IP Address Utilities
+- `IP(r *http.Request) string` - Gets the client's IP address
+- `IsPrivateIP(ip string) bool` - Checks if an IP address is in a private range
+
+### Subdomain Handling
+- `Subdomain(host string) string` - Extracts the subdomain from a hostname
+
+### Request Data
+- `All(r *http.Request) url.Values` - Gets all request parameters (GET and POST combined)
+- `AllGet(r *http.Request) url.Values` - Gets all GET parameters
+- `AllPost(r *http.Request) url.Values` - Gets all POST parameters
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
