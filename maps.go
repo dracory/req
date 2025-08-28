@@ -9,7 +9,7 @@ import (
 )
 
 func Maps(r *http.Request, key string, defaultValue []map[string]string) []map[string]string {
-	all := All(r)
+	all := GetAll(r)
 
 	if all == nil {
 		return []map[string]string{}

@@ -37,7 +37,7 @@ if req.Has(r, "key") {
 }
 
 // Get all parameters from a request
-allParams := req.All(r)
+allParams := req.GetAll(r)
 ```
 
 ## Examples
@@ -115,9 +115,9 @@ subdomain := req.Subdomain("api.example.com") // returns "api"
 - `Subdomain(host string) string` - Extracts the subdomain from a hostname
 
 ### Request Data
-- `All(r *http.Request) url.Values` - Gets all request parameters (GET and POST combined)
-- `AllGet(r *http.Request) url.Values` - Gets all GET parameters
-- `AllPost(r *http.Request) url.Values` - Gets all POST parameters
+- `GetAll(r *http.Request) url.Values` - Gets all request parameters (GET and POST combined)
+- `GetAllGet(r *http.Request) url.Values` - Gets all GET parameters
+- `GetAllPost(r *http.Request) url.Values` - Gets all POST parameters
 
 ## Contributing
 

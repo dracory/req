@@ -14,7 +14,7 @@ import (
 // Returns:
 //   - map[string]string: map for key
 func Map(r *http.Request, key string) map[string]string {
-	all := All(r)
+	all := GetAll(r)
 
 	reqMap := map[string]string{}
 

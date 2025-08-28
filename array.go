@@ -18,7 +18,7 @@ import (
 // Returns:
 //   - []string: array for key, or default value if not exists
 func Array(r *http.Request, key string, defaultValue []string) []string {
-	all := All(r)
+	all := GetAll(r)
 
 	if all == nil {
 		return defaultValue
