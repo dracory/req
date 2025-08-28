@@ -81,6 +81,19 @@ if req.IsPrivateIP(ip) {
 }
 ```
 
+Advanced (configurable):
+
+```go
+// Use options to control precedence, trusted proxies, and extra headers
+ip := req.GetIPWithOptions(r, req.IPOptions{
+    PreferForwardedFor:        true, // check X-Forwarded-For before X-Real-IP
+    TrustedProxies:            []string{"127.0.0.1/32", "10.0.0.0/8", "::1/128"},
+    AdditionalHeaders:         []string{"CF-Connecting-IP", "True-Client-IP"},
+    Validate:                  true,  // ensure candidates parse as IPs
+    ReturnPrivateIfAllPrivate: true,  // when no public IP in XFF
+})
+```
+
 ### Subdomain Handling
 
 ```go
@@ -110,6 +123,7 @@ subdomain := req.GetSubdomain(r) // returns "api" for host like api.example.com
 
 ### IP Address Utilities
 - `GetIP(r *http.Request) string` - Gets the client's IP address
+- `GetIPWithOptions(r *http.Request, opts IPOptions) string` - Gets the client's IP with configurable precedence, trusted proxies, and headers
 - `IsPrivateIP(ip string) bool` - Checks if an IP address is in a private range
 
 ### Subdomain Handling
