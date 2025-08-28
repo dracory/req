@@ -2,7 +2,7 @@ package req
 
 import "net/http"
 
-// ValueOr returns a POST or GET key, or the provided default value if the key does not exist
+// GetStringOr returns a POST or GET key, or the provided default value if the key does not exist
 // or its value is an empty string.
 //
 // Parameters:
@@ -12,9 +12,9 @@ import "net/http"
 //
 // Returns:
 //  - string: value for key, or default value if key doesn't exist or is empty
-func ValueOr(r *http.Request, key string, defaultValue string) string {
-	if value := Value(r, key); value != "" {
-		return value
-	}
-	return defaultValue
+func GetStringOr(r *http.Request, key string, defaultValue string) string {
+    if value := GetString(r, key); value != "" {
+        return value
+    }
+    return defaultValue
 }

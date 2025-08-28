@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Subdomain finds the subdomain in the host of the given request.
+// GetSubdomain finds the subdomain in the host of the given request.
 //
 // Business logic:
 // - extract the host from the request
@@ -18,7 +18,7 @@ import (
 //
 // Returns:
 //   - string: the subdomain, or an empty string if none found.
-func Subdomain(r *http.Request) string {
+func GetSubdomain(r *http.Request) string {
 	if r == nil || r.URL == nil || r.URL.Host == "" {
 		return ""
 	}

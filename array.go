@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cast"
 )
 
-// Array retrieves values from the request that match the given key in various formats:
+// GetArray retrieves values from the request that match the given key in various formats:
 // 1. Direct match (key=value1&key=value2)
 // 2. Array notation (key[]=value1&key[]=value2)
 // 3. Numbered notation (key[0]=value1&key[1]=value2)
@@ -20,7 +20,7 @@ import (
 //
 // Returns:
 //   - []string: array of values for the key, or defaultValue if not found
-func Array(r *http.Request, key string, defaultValue []string) []string {
+func GetArray(r *http.Request, key string, defaultValue []string) []string {
 	all := GetAll(r)
 	if all == nil {
 		return defaultValue

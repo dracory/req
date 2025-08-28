@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestValueOr(t *testing.T) {
+func TestGetStringOr(t *testing.T) {
 	tests := []struct {
 		name         string
 		req          *http.Request
@@ -23,7 +23,7 @@ func TestValueOr(t *testing.T) {
 			want:         "1",
 		},
 		{
-			name:         "GET value does not exist",
+			name:         "value does not exist returns default",
 			req:          httptest.NewRequest("GET", "/path?a=1&b=2", nil),
 			key:          "c",
 			defaultValue: "default",
@@ -62,9 +62,9 @@ func TestValueOr(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ValueOr(tt.req, tt.key, tt.defaultValue)
+			got := GetStringOr(tt.req, tt.key, tt.defaultValue)
 			if got != tt.want {
-				t.Errorf("ValueOr() = %q, want %q", got, tt.want)
+				t.Errorf("GetStringOr() = %q, want %q", got, tt.want)
 			}
 		})
 	}

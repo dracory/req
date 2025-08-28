@@ -2,7 +2,7 @@ package req
 
 import "net/http"
 
-// Value returns a POST or GET key, or empty string if not exists
+// GetString returns a POST or GET key, or empty string if not exists
 //
 // Parameters:
 //  - r *http.Request: HTTP request
@@ -10,7 +10,7 @@ import "net/http"
 //
 // Returns:
 //  - string: value for key, or empty string if not exists
-func Value(r *http.Request, key string) string {
+func GetString(r *http.Request, key string) string {
 	postValue := r.FormValue(key)
 
 	if len(postValue) > 0 {

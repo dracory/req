@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// Maps parses an array of maps from request parameters with the given key prefix.
+// GetMaps parses an array of maps from request parameters with the given key prefix.
 // Supported formats:
 //   - key[mapKey][] = value (auto-numbered rows)
 //   - key[outer][inner] = value (two-level keys; uses the inner key as the map key)
@@ -19,7 +19,7 @@ import (
 //
 // Returns:
 //   - []map[string]string: An array of maps containing the parsed values
-func Maps(r *http.Request, key string, defaultValue []map[string]string) []map[string]string {
+func GetMaps(r *http.Request, key string, defaultValue []map[string]string) []map[string]string {
 	all := GetAll(r)
 
 	if all == nil {

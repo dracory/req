@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// ValueTrimmed returns a POST or GET key with leading and trailing whitespace removed.
+// GetStringTrimmed returns a POST or GET key with leading and trailing whitespace removed.
 // Returns an empty string if the key does not exist.
 //
 // Parameters:
@@ -14,6 +14,6 @@ import (
 //
 // Returns:
 //   - string: trimmed value for key, or empty string if not exists
-func ValueTrimmed(r *http.Request, key string) string {
-	return strings.TrimSpace(Value(r, key))
+func GetStringTrimmed(r *http.Request, key string) string {
+	return strings.TrimSpace(GetString(r, key))
 }

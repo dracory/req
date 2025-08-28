@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestValueTrimmedOr(t *testing.T) {
+func TestGetStringTrimmedOr(t *testing.T) {
 	tests := []struct {
 		name         string
 		method       string
@@ -148,11 +148,11 @@ func TestValueTrimmedOr(t *testing.T) {
 			}
 
 			// Call the function under test
-			got := ValueTrimmedOr(req, tt.key, tt.defaultValue)
+			got := GetStringTrimmedOr(req, tt.key, tt.defaultValue)
 
 			// Assert the result
 			if got != tt.want {
-				t.Errorf("ValueTrimmedOr() = %q, want %q", got, tt.want)
+				t.Errorf("GetStringTrimmedOr() = %q, want %q", got, tt.want)
 			}
 		})
 	}

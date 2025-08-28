@@ -56,9 +56,9 @@ func TestValue(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := Value(tt.req, tt.key)
+			got := GetString(tt.req, tt.key)
 			if got != tt.want {
-				t.Errorf("Value() = %q, want %q", got, tt.want)
+				t.Errorf("GetString() = %q, want %q", got, tt.want)
 			}
 		})
 	}

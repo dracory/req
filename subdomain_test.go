@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestSubdomain(t *testing.T) {
+func TestGetSubdomain(t *testing.T) {
 	tests := []struct {
 		name     string
 		host     string
@@ -45,19 +45,19 @@ func TestSubdomain(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			subdomain := Subdomain(req)
+			subdomain := GetSubdomain(req)
 
 			if subdomain != tt.expected {
-				t.Errorf("Subdomain() = %q, want %q", subdomain, tt.expected)
+				t.Errorf("GetSubdomain() = %q, want %q", subdomain, tt.expected)
 			}
 		})
 	}
 }
 
-func TestSubdomain_NilRequest(t *testing.T) {
-	subdomain := Subdomain(nil)
+func TestGetSubdomain_NilRequest(t *testing.T) {
+	subdomain := GetSubdomain(nil)
 
 	if subdomain != "" {
-		t.Errorf("Subdomain() = %q, want \"\"", subdomain)
+		t.Errorf("GetSubdomain() = %q, want \"\"", subdomain)
 	}
 }

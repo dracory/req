@@ -51,10 +51,10 @@ func IsPrivateIP(ipStr string) bool {
 	return false
 }
 
-// IP gets the IP address for the user by checking X-REAL-IP, X-FORWARDED-FOR headers,
+// GetIP gets the IP address for the user by checking X-REAL-IP, X-FORWARDED-FOR headers,
 // and finally falling back to RemoteAddr. For X-FORWARDED-FOR, it returns the first
 // non-private IP address in the chain, or the last IP if all are private.
-func IP(r *http.Request) string {
+func GetIP(r *http.Request) string {
 	// Get IP from the X-REAL-IP header
 	realIP := r.Header.Get("X-REAL-IP")
 	if realIP != "" {

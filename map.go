@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Map returns a map from the request
+// GetMap returns a map from the request
 //
 // Parameters:
 //   - r *http.Request: HTTP request
@@ -13,7 +13,7 @@ import (
 //
 // Returns:
 //   - map[string]string: map for key
-func Map(r *http.Request, key string) map[string]string {
+func GetMap(r *http.Request, key string) map[string]string {
 	all := GetAll(r)
 
 	reqMap := map[string]string{}

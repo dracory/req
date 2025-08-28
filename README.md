@@ -26,10 +26,10 @@ go get github.com/dracory/req
 import "github.com/dracory/req"
 
 // Get a value from request parameters
-value := req.Value(r, "key")
+value := req.GetString(r, "key")
 
 // Get a value with a default if not found
-value := req.ValueOr(r, "key", "default")
+valueOr := req.GetStringOr(r, "key", "default")
 
 // Check if a parameter exists
 if req.Has(r, "key") {
@@ -46,32 +46,37 @@ allParams := req.GetAll(r)
 
 ```go
 // Get string value with empty string as default
-username := req.Value(r, "username")
+username := req.GetString(r, "username")
 
 // Get value with custom default
-age := req.ValueOr(r, "age", "18")
+age := req.GetStringOr(r, "age", "18")
 
 // Get trimmed value (whitespace removed)
-searchTerm := req.TrimmedValue(r, "q")
+searchTerm := req.GetStringTrimmed(r, "q")
 ```
 
 ### Working with Arrays
 
 ```go
 // Get array of values
-colors := req.Array(r, "colors")
+colors := req.GetArray(r, "colors", nil)
 
-// Check if array contains value
-if req.ArrayHas(r, "permissions", "admin") {
+// Check if array contains a value (simple contains check)
+hasAdmin := false
+for _, v := range colors {
+    if v == "admin" { hasAdmin = true; break }
+}
+if hasAdmin {
     // User has admin permission
 }
+
 ```
 
 ### IP Address Utilities
 
 ```go
 // Get client IP address
-ip := req.IP(r)
+ip := req.GetIP(r)
 
 // Check if IP is in a private range
 if req.IsPrivateIP(ip) {
@@ -83,16 +88,16 @@ if req.IsPrivateIP(ip) {
 
 ```go
 // Extract subdomain from host
-subdomain := req.Subdomain("api.example.com") // returns "api"
+subdomain := req.GetSubdomain(r) // returns "api" for host like api.example.com
 ```
 
 ## Available Functions
 
 ### Request Parameter Handling
-- `Value(r *http.Request, key string) string` - Returns the value of a GET or POST parameter
-- `ValueOr(r *http.Request, key string, defaultValue string) string` - Returns a value with a fallback if not found
-- `TrimmedValue(r *http.Request, key string) string` - Returns a trimmed (whitespace removed) value
-- `TrimmedValueOr(r *http.Request, key string, defaultValue string) string` - Returns a trimmed value with a fallback
+- `GetString(r *http.Request, key string) string` - Returns the value of a GET or POST parameter
+- `GetStringOr(r *http.Request, key string, defaultValue string) string` - Returns a value with a fallback if not found
+- `GetStringTrimmed(r *http.Request, key string) string` - Returns a trimmed (whitespace removed) value
+- `GetStringTrimmedOr(r *http.Request, key string, defaultValue string) string` - Returns a trimmed value with a fallback
 
 ### Parameter Existence Checking
 - `Has(r *http.Request, key string) bool` - Checks if a parameter exists in GET or POST
@@ -100,19 +105,18 @@ subdomain := req.Subdomain("api.example.com") // returns "api"
 - `HasPost(r *http.Request, key string) bool` - Checks if a POST parameter exists
 
 ### Array Operations
-- `Array(r *http.Request, key string, defaultValue []string) []string` - Gets an array of values from request parameters
-- `ArrayHas(r *http.Request, key string, value string) bool` - Checks if an array contains a specific value
+- `GetArray(r *http.Request, key string, defaultValue []string) []string` - Gets an array of values from request parameters
 
 ### Map Operations
-- `Map(r *http.Request, key string) map[string]string` - Gets a map from request parameters
-- `Maps(r *http.Request, key string, defaultValue []map[string]string) []map[string]string` - Gets an array of maps from request parameters
+- `GetMap(r *http.Request, key string) map[string]string` - Gets a map from request parameters
+- `GetMaps(r *http.Request, key string, defaultValue []map[string]string) []map[string]string` - Gets an array of maps from request parameters
 
 ### IP Address Utilities
-- `IP(r *http.Request) string` - Gets the client's IP address
+- `GetIP(r *http.Request) string` - Gets the client's IP address
 - `IsPrivateIP(ip string) bool` - Checks if an IP address is in a private range
 
 ### Subdomain Handling
-- `Subdomain(host string) string` - Extracts the subdomain from a hostname
+- `GetSubdomain(r *http.Request) string` - Extracts the subdomain from the request hostname
 
 ### Request Data
 - `GetAll(r *http.Request) url.Values` - Gets all request parameters (GET and POST combined)
